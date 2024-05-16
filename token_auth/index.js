@@ -28,7 +28,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/logout', (req, res) => {
-    sessions.destroy(req, res);
     res.redirect('/');
 });
 
