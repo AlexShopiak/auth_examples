@@ -117,7 +117,7 @@
     </style>
 
     <script>
-        const session = sessionStorage.getItem('session');
+        const session = localStorage.getItem('token');
 
         let token;
 
@@ -155,7 +155,7 @@
 
         logoutLink.addEventListener("click", (e) => {
             e.preventDefault();
-            sessionStorage.removeItem('session');
+            localStorage.removeItem('token');
             location.reload();
         });
 
@@ -173,8 +173,8 @@
                     password
                 }
             }).then((response) => {
-                const { username } =  response.data;
-                sessionStorage.setItem('session', JSON.stringify(response.data));
+                const { token } =  response.data;
+                localStorage.setItem('token', JSON.stringify(response.data));
                 location.reload();
             }).catch((response) => {
                 loginErrorMsg.style.opacity = 1;
