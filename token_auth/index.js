@@ -11,11 +11,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const JWT_SECRET = 'secret';
 
 app.get('/', (req, res) => {
-    if (req.session.username) {
-        return res.json({
-            username: req.session.username,
-            logout: 'http://localhost:3000/logout'
-        })
+    const token = req.headers.authorization;
+    if (token) {
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+                return res.status(401).send();
+            } else {
+                return res.json({
+                    username: decoded.username,
+                    logout: 'http://localhost:3000/logout'
+                })
+            }
+        });
     }
     res.sendFile(path.join(__dirname+'/index.html'));
 })
