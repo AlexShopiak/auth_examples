@@ -13,7 +13,7 @@ const JWT_SECRET = 'secret';
 app.get('/', (req, res) => {
     const token = req.headers.authorization;
     if (token) {
-        jwt.verify(token, secretKey, (err, decoded) => {
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).send();
             } else {
@@ -55,13 +55,11 @@ app.post('/api/login', (req, res) => {
     });
 
     if (user) {
-        req.session.username = user.username;
-        req.session.login = user.login;
-
-        res.json({ token: req.sessionId });
+        const token = jwt.sign({ username: user.login }, JWT_SECRET);
+        res.json({ token });
+    } else {
+        res.status(401).send();
     }
-
-    res.status(401).send();
 });
 
 app.listen(port, () => {
